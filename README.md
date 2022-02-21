@@ -1,4 +1,4 @@
-# Scheduler Services API
+# Service Scheduler API
 ___
 Hello, with the purpose of assisting customers and workers in hiring necessary and offered services, the scheduler-services project was developed, which allows customers to hire workers easily and quickly and workers can make their skills available effortlessly focusing only on what matters, the completion of the tasks.
 
