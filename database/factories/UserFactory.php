@@ -29,7 +29,7 @@ class UserFactory extends Factory
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => md5('secret'),
+            'password' => 'secret',
             'cellphone' => $this->faker->numerify('###########'),
             'address' => $this->faker->address,
             'city' => $this->faker->city,

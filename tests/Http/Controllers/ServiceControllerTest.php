@@ -50,7 +50,20 @@ class ServiceControllerTest extends TestCase
             ->assertResponseStatus(200);
     }
 
-    public function testListSucessfully(){
+    public function testListSucessfullyAsAdmin(){
+        $user = User::factory()->create(['type' => UserType::ADMIN]);
+        $worker = Worker::factory()->create(['user_id' => $user->getAttribute('id')]);
+        $services = Service::factory()->count(40)->create(['worker_id' => $worker->getAttribute('id')]);
+        $token = auth()->login($user);
+        $this->json('GET', 'services?page=1', [], ['Authorization' => 'Bearer ' . $token])
+            ->seeJson(['per_page' => 20])
+            ->assertResponseStatus(200);
+        $this->json('GET', 'services?page=2', [], ['Authorization' => 'Bearer ' . $token])
+            ->seeJson(['per_page' => 20])
+            ->assertResponseStatus(200);
+    }
+
+    public function testListSucessfullyAsWorker(){
         $user = User::factory()->create(['type' => UserType::WORKER]);
         $worker = Worker::factory()->create(['user_id' => $user->getAttribute('id')]);
         $services = Service::factory()->count(40)->create(['worker_id' => $worker->getAttribute('id')]);

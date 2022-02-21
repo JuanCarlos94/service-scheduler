@@ -15,7 +15,9 @@ class UserControllerTest extends TestCase
     public function testFindUserRegistered()
     {
         $user = User::factory()->create(['type' => 'customer']);
-        $this->json('GET', '/users/' . $user->getAttribute('id'))
+        $admin = User::factory()->create(['type' => 'admin']);
+        $token = auth()->login($admin);
+        $this->json('GET', '/users/' . $user->getAttribute('id'), [], ['Authorization' => 'Bearer ' . $token])
             ->seeJson([
                 'id' => $user->getAttribute('id'),
                 'name' => $user->getAttribute('name'),
@@ -33,7 +35,7 @@ class UserControllerTest extends TestCase
 
     public function testUserNotFound(){
         $this->json('GET', '/users/1')
-            ->assertResponseStatus(404);
+            ->assertResponseStatus(401);
     }
 
     public function testCreateUserSucessfully(){
@@ -215,21 +217,26 @@ class UserControllerTest extends TestCase
     }
 
     public function testTryRemoveUserUnregistered(){
-        $this->json('DELETE', '/users/1')
+        $user = UserFactory::new()->create(['type' => 'admin']);
+        $token = auth()->login($user);
+        $this->json('DELETE', '/users/999', ['Authorization' => 'Bearer ' . $token])
             ->shouldReturnJson(['message' => 'Usuário não encontrado.'])
             ->assertResponseStatus(404);
     }
 
     public function testRemoveUserSucessfully(){
-        $user = UserFactory::new()->create();
-        $this->json('DELETE', '/users/' . $user->getAttribute('id'))
+        $user = UserFactory::new()->create(['type' => 'admin']);
+        $token = auth()->login($user);
+        $this->json('DELETE', '/users/' . $user->getAttribute('id'), ['Authorization' => 'Bearer ' . $token])
             ->assertResponseStatus(200);
     }
 
     public function testListAllUsers(){
+        $userAdmin = User::factory()->create(['type' => 'admin']);
         User::factory()->count(20)->create();
-        $this->json('GET', '/users')
-            ->seeJson(['total' => 20])
+        $token = auth()->login($userAdmin);
+        $this->json('GET', '/users', [], ['Authorization' => 'Bearer ' . $token])
+            ->seeJson(['per_page' => 20])
             ->assertResponseStatus(200);
     }
 
@@ -247,7 +254,8 @@ class UserControllerTest extends TestCase
             'zip_code' => '30291101',
             'type' => 'customer'
         ];
-        $request = $this->json('PUT', '/users/' . $user->getAttribute('id'), $payload);
+        $token = auth()->login($user);
+        $request = $this->json('PUT', '/users/' . $user->getAttribute('id'), $payload, ['Authorization' => 'Bearer ' . $token]);
         unset($payload['password']);
         unset($payload['password_confirmation']);
         unset($payload['type']);
@@ -256,6 +264,7 @@ class UserControllerTest extends TestCase
     }
 
     public function testUpdateUnregisteredUser(){
+        $user = User::factory()->create(['type' => 'admin']);
         $payload = [
             'name' => 'Nome Usuário Atualizar',
             'email' => 'usuarioatualizado@mail.com',
@@ -268,7 +277,8 @@ class UserControllerTest extends TestCase
             'zip_code' => '30291101',
             'type' => 'customer'
         ];
-        $request = $this->json('PUT', '/users/1', $payload);
+        $token = auth()->login($user);
+        $request = $this->json('PUT', '/users/999', $payload, ['Authorization' => 'Bearer ' . $token]);
         unset($payload['password']);
         unset($payload['password_confirmation']);
         $request->seeJson(["message" => "Usuário não encontrado."])

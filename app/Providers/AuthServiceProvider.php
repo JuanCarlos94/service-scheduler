@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Exceptions\UnauthorizedException;
 use App\Models\User;
+use App\Models\UserType;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,9 +33,23 @@ class AuthServiceProvider extends ServiceProvider
         // the User instance via an API token or any other method necessary.
 
         $this->app['auth']->viaRequest('api', function ($request) {
-            if ($request->input('api_token')) {
-                return auth()->user();
-            }
+
+        });
+
+        Gate::define('admin-only', function($user){
+            return $user->type === UserType::ADMIN;
+        });
+
+        Gate::define('worker-only', function($user){
+            return $user->type === UserType::WORKER;
+        });
+
+        Gate::define('customer-only', function($user){
+            return $user->type === UserType::CUSTOMER;
+        });
+
+        Gate::define('admin-or-user-himself', function($user, $id){
+            return $user->type === UserType::ADMIN || $user->id == $id;
         });
     }
 }

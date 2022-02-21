@@ -16,7 +16,7 @@ class AuthControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $token = auth()->login($user);
-        $this->json('POST', '/auth/me', [], ['Authorization' => 'Bearer ' . $token])
+        $this->json('POST', '/me', [], ['Authorization' => 'Bearer ' . $token])
             ->seeJsonStructure(['id', 'name', 'email', 'cellphone', 'address', 'city', 'state', 'zip_code', 'created_at', 'updated_at'])
             ->assertResponseStatus(200);
     }
@@ -25,7 +25,7 @@ class AuthControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $token = auth()->login($user);
-        $this->json('POST', '/auth/refresh', [], ['Authorization' => 'Bearer ' . $token])
+        $this->json('POST', '/refresh', [], ['Authorization' => 'Bearer ' . $token])
             ->seeJsonStructure(['access_token', 'token_type', 'expires_in'])
             ->assertResponseStatus(200);
     }
@@ -34,7 +34,7 @@ class AuthControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $token = auth()->login($user);
-        $this->json('POST', '/auth/logout', [], ['Authorization' => 'Bearer ' . $token])
+        $this->json('POST', '/logout', [], ['Authorization' => 'Bearer ' . $token])
             ->seeJsonStructure(['message'])
             ->assertResponseStatus(200);
     }
@@ -42,7 +42,7 @@ class AuthControllerTest extends TestCase
     public function testLoginSucessfully()
     {
         $user = User::factory()->create(['type' => 'customer']);
-        $this->json('POST', '/auth/login', [
+        $this->json('POST', '/login', [
             'email' => $user->getAttribute('email'),
             'password' => 'secret'])
             ->seeJsonStructure(['access_token', 'token_type', 'expires_in'])

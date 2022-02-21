@@ -36,7 +36,23 @@ class Service extends Model
     ];
 
     public function worker(){
-        return $this->hasOne(Worker::class, 'worker_id', 'id');
+        return $this->belongsTo(Worker::class, 'worker_id', 'id');
+    }
+
+    public function contracts(){
+        return $this->hasMany(Contract::class, 'service_id', 'id');
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'value' => $this->value,
+            'worker' => $this->worker->user,
+            'worker_id' => $this->worker_id
+        ];
     }
 
 }

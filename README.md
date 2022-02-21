@@ -1,24 +1,53 @@
-# Lumen PHP Framework
+# Scheduler Services API
+___
+Hello, with the purpose of assisting customers and workers in hiring necessary and offered services, the scheduler-services project was developed, which allows customers to hire workers easily and quickly and workers can make their skills available effortlessly focusing only on what matters, the completion of the tasks.
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
+## Dependencies
+___
+| Dependency | Version|
+|:------------|-------|
+|php|^7.4 - 8.0|
+| laravel/lumen-framework | ^8.* |
+|tymon/jwt-auth|^1.0|
+|darkaonline/swagger-lume|8.*|
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+## Installation
+___
+```
+git clone https://github.com/JuanCarlos94/service-scheduler.git
+```
+```
+cd service-scheduler
+```
+```
+composer install
+```
 
-## Official Documentation
+Create an .env file with the .env.example file structure
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+- Fill in the required fields for database connection in the .env.
 
-## Contributing
+- Set APP_KEY option of your .env file to a 32 character random string.
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Set JWT_SECRET option of your .env file to a 64 character random string.
 
-## Security Vulnerabilities
+Execute the command line for testing verification:
+```
+./vendor/bin/phpunit
+```
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Execute the command to start the server:
+```
+php -S localhost:8000 public/index.php
+```
 
-## License
+### API Documentation
+The API documentation using swagger can be access in the routes:
+```
+http://localhost:8000/api/documentation
+```
+```
+http://localhost:8000/docs
+```
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+

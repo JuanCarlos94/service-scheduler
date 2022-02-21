@@ -11,8 +11,6 @@ class Contract extends Model
 
     protected $table = 'contracts';
 
-    public $timestamps = false;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -31,12 +29,36 @@ class Contract extends Model
 
     ];
 
+    protected $casts = [
+        'value' => 'float'
+    ];
+
     public function service(){
-        return $this->hasOne(Service::class, 'service_id', 'id');
+        return $this->belongsTo(Service::class, 'service_id', 'id');
     }
 
     public function user(){
-        return $this->hasOne(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'status' => $this->status,
+            'scheduled_to' => $this->scheduled_to,
+            'user_confirmation' => $this->user_confirmation,
+            'worker_confirmation' => $this->worker_confirmation,
+            'value' => floatval($this->value),
+            'note' => $this->note,
+            'service_id' => $this->service_id,
+            'service' => $this->service,
+            'user_id' => $this->user_id,
+            'customer' => $this->user,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at
+        ];
+    }
+
 
 }

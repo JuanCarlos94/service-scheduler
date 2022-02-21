@@ -2,8 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\UnauthorizedException;
+use App\Models\UserType;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Support\Facades\Gate;
 
 class Authenticate
 {
@@ -38,6 +41,9 @@ class Authenticate
 //        if ($this->auth->guard($guard)->guest()) {
 //            return response('Unauthorized.', 401);
 //        }
+        if(! auth()->user()){
+            throw new UnauthorizedException();
+        }
 
         return $next($request);
     }

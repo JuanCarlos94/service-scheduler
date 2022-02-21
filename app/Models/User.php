@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
@@ -20,7 +21,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'cellphone', 'address', 'city', 'state', 'zip_code'
+        'name', 'email', 'password', 'cellphone', 'address', 'city', 'state', 'zip_code'
     ];
 
     /**
@@ -32,8 +33,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password', 'type'
     ];
 
-    public function setPassword($password){
-        return $this->password = md5($password);
+    public function setPasswordAttribute($value){
+        return $this->attributes['password'] = md5($value);
     }
 
     public function getJWTIdentifier()
@@ -44,5 +45,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function worker(){
+        return $this->hasOne(Worker::class, 'user_id', 'id');
     }
 }
