@@ -325,7 +325,8 @@ class UserController extends Controller
             'address' => 'required|max:255',
             'city' => 'required|max:255',
             'state' => 'required|max:2',
-            'zip_code' => 'required|size:8'
+            'zip_code' => 'required|size:8',
+            'type' => 'required|in:'.UserType::ADMIN.','.UserType::CUSTOMER.','.UserType::WORKER
         ], [
             'zip_code.required' => 'O campo CEP é obrigatório.',
             'zip_code.size' => 'CEP deve ter 8 dígitos.',
@@ -346,7 +347,8 @@ class UserController extends Controller
             'address' => 'required|max:255',
             'city' => 'required|max:255',
             'state' => 'required|max:2',
-            'zip_code' => 'required|size:8'
+            'zip_code' => 'required|size:8',
+            'type' => 'required|in:'.UserType::ADMIN.','.UserType::CUSTOMER.','.UserType::WORKER
         ], [
             'zip_code.required' => 'O campo CEP é obrigatório.',
             'zip_code.size' => 'CEP deve ter 8 dígitos.',
