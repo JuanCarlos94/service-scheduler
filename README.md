@@ -41,6 +41,11 @@ Execute the command line for testing verification:
 php ./vendor/bin/phpunit
 ```
 
+Execute the command to initialize the database:
+```
+php artisan migrate
+```
+
 API Documentation Configuration:
 - Run ``php artisan swagger-lume:publish-config`` to publish configs (config/swagger-lume.php)
 
